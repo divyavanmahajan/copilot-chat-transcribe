@@ -161,16 +161,7 @@ def _run_file_mode(args: argparse.Namespace) -> None:
 
 
 def _run_connect_mode(args: argparse.Namespace) -> None:
-    try:
-        from .connector import connect, prompt_select_conversation, download_conversation
-    except ImportError:
-        print(
-            "Error: Playwright is required for --connect mode.\n"
-            "Install it with:  pip install 'copilot-chat-transcribe[connect]'\n"
-            "Then run:         playwright install msedge",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+    from .connector import connect, prompt_select_conversation, download_conversation
 
     print(f"Connecting to browser at {args.cdp_url} …")
     try:

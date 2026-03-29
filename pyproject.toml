@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "copilot-chat-transcribe"
-version = "1.0.0"
+version = "1.0.1"
 description = "Convert Microsoft 365 Copilot chat exports to readable HTML and Markdown transcripts"
 readme = "README.md"
 license = { text = "MIT" }
@@ -26,10 +26,6 @@ classifiers = [
 ]
 dependencies = [
     "markdown>=3.0",
-]
-
-[project.optional-dependencies]
-connect = [
     "playwright>=1.40",
 ]
 
