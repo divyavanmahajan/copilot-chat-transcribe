@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "copilot-chat-transcribe"
+version = "0.1.0"
+description = "Convert Microsoft 365 Copilot chat exports to readable HTML and Markdown transcripts"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+keywords = ["microsoft", "copilot", "m365", "chat", "transcript", "html", "markdown"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Communications :: Chat",
+    "Topic :: Text Processing :: Markup :: HTML",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "markdown>=3.0",
+]
+
+[project.optional-dependencies]
+connect = [
+    "playwright>=1.40",
+]
+
+[project.scripts]
+copilot-chat-transcribe = "copilot_chat_transcribe.cli:main"
+
+[project.urls]
+"Source" = "https://github.com/your-org/copilot-chat-transcribe"
+"Bug Tracker" = "https://github.com/your-org/copilot-chat-transcribe/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/copilot_chat_transcribe"]
