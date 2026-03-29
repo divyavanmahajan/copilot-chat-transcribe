@@ -68,6 +68,38 @@ def _start_edge(port: int) -> subprocess.Popen:
         time.sleep(0.4)
 
     proc.terminate()
+
+    # Port did not open — leftover Edge processes likely absorbed the new launch
+    # without applying the --remote-debugging-port flag.
+    print(
+        f"\nMSEdge started but port {port} did not open within 10 seconds.\n"
+        "Microsoft confirms this behavior: leftover Edge processes prevent the\n"
+        "--remote-debugging-port flag from being applied.\n"
+        "✔ Recommended fix: kill all running Edge processes."
+    )
+    try:
+        answer = input("Kill all running Edge processes and retry? [Y/n]: ").strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        answer = "n"
+
+    if answer in ("", "y", "yes"):
+        subprocess.run(
+            ["taskkill", "/f", "/im", "msedge.exe"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        print("Edge processes terminated. Retrying …")
+        proc2 = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        deadline2 = time.monotonic() + 10
+        while time.monotonic() < deadline2:
+            if _port_open("localhost", port):
+                return proc2
+            time.sleep(0.4)
+        proc2.terminate()
+        raise TimeoutError(
+            f"MSEdge still could not open debug port {port} after killing existing processes."
+        )
+
     raise TimeoutError(
         f"MSEdge started but the debug port {port} did not open within 10 seconds."
     )

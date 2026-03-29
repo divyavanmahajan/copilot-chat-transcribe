@@ -166,7 +166,7 @@ def _run_connect_mode(args: argparse.Namespace) -> None:
     print(f"Connecting to browser at {args.cdp_url} …")
     try:
         pw, browser, page = connect(args.cdp_url)
-    except (ConnectionError, FileNotFoundError) as exc:
+    except (ConnectionError, FileNotFoundError, TimeoutError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         sys.exit(1)
 

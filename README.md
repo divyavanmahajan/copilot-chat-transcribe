@@ -3,6 +3,10 @@
 Convert **Microsoft 365 Copilot** chat sessions into clean, readable transcripts —
 a styled HTML file you can open in any browser, and a plain Markdown file for note-taking apps.
 
+> **Platform:** This tool targets **Windows**. File mode works cross-platform, but
+> `--connect` mode relies on Windows-specific MSEdge executable paths and process
+> management (`taskkill`).
+
 Two modes:
 
 | Mode | When to use |
@@ -189,8 +193,25 @@ playwright install msedge
 ### Edge opens but the tool can't connect
 
 Make sure Edge was launched **with** the debugging flag.  
-If Edge was already running before you ran the tool, close it fully (check the system tray)
-and let the tool start it, or start it manually with `--remote-debugging-port=9222`.
+If Edge was already running before you ran the tool, the `--remote-debugging-port`
+flag is silently ignored by the existing process — port 9222 will never open.
+
+**Microsoft confirms this behaviour:** leftover Edge processes prevent the flag from
+being applied.  
+✔ **Recommended fix:** kill all running Edge processes.
+
+The tool detects this automatically and will prompt you:
+
+```
+MSEdge started but port 9222 did not open within 10 seconds.
+Microsoft confirms this behavior: leftover Edge processes prevent the
+--remote-debugging-port flag from being applied.
+✔ Recommended fix: kill all running Edge processes.
+Kill all running Edge processes and retry? [Y/n]:
+```
+
+Press **Enter** to let the tool run `taskkill /f /im msedge.exe` and retry, or kill
+them yourself first and then re-run `copilot-chat-transcribe --connect`.
 
 ### `UnicodeEncodeError` on Windows
 
